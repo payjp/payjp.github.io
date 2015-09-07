@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width,initial-scale=1.0" name="viewport">
+  <title></title>
+  <script type="text/javascript" src="https://js.pay.jp/"></script>
+  <link rel="stylesheet" href="//oss.maxcdn.com/semantic-ui/2.0.7/semantic.min.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="https://raw.githubusercontent.com/daneden/animate.css/master/animate.min.css" media="screen" title="no title" charset="utf-8">
+  <style media="screen">
+    section {
+      margin: 15px;
+      max-width: 960px;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <form class="ui form">
+      <h4 class="ui dividing header">支払い</h4>
+
+      <div class="field">
+        <label>カード番号</label>
+        <input type="text" name="number" maxlength="16" placeholder="Card #">
+      </div>
+
+      <div class="fields">
+        <div class="six wide field">
+          <label>CVC</label>
+          <input type="text" name="cvc" maxlength="3" placeholder="CVC">
+        </div>
+        <div class="ten wide field">
+          <label>有効期限</label>
+          <div class="two fields">
+            <div class="field">
+              <select class="ui fluid search dropdown" name="exp_month">
+                <option value="">月</option>
+                <option value="1">01</option>
+                <option value="2">02</option>
+                <option value="3">03</option>
+                <option value="4">04</option>
+                <option value="5">05</option>
+                <option value="6">06</option>
+                <option value="7">07</option>
+                <option value="8">08</option>
+                <option value="9">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+            </div>
+            <div class="field">
+              <input type="text" name="exp_year" maxlength="4" placeholder="年">
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="ui button fill" tabindex="0">
+        サンプルのカード番号を使う
+      </button>
+      <button class="ui primary button submit">
+        送信
+      </button>
+      <p id="result"></p>
+    </form>
+  </section>
+
+  <script type="text/javascript">
+    (function() {
+
+      var number = document.querySelector('input[name="number"]'),
+          cvc = document.querySelector('input[name="cvc"]'),
+          exp_month = document.querySelector('select[name="exp_month"]'),
+          exp_year = document.querySelector('input[name="exp_year"]')
+      ;
+
+      document.querySelector('.fill').addEventListener('click', function(e) {
+        e.preventDefault();
+        number.value = '4242424242424242';
+        cvc.value = '123';
+        exp_month.value = '12';
+        exp_year.value = '2020';
+      });
+
+      document.querySelector('.submit').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        Payjp.setPublicKey('pk_test_0383a1b8f91e8a6e3ea0e2a9');
+
+        var card = {
+          number: number.value,
+          exp_month: exp_month.value,
+          exp_year: exp_year.value
+        }
+
+        Payjp.createToken(card, 1000, function(s, response) {
+          document.getElementById('result').innerText = 'Token = ' + response.id;
+        });
+      });
+
+    })();
+  </script>
+
+</body>
+</html>
