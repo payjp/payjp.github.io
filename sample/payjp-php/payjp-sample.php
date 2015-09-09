@@ -7,11 +7,13 @@
 カード情報だけを PAY.JP 上に預け、アプリケーション側では PAY.JP Checkout から発行された
 Token を使用して決済を行います。
 
-※ `data-key` の部分は本番で使う際には管理画面内に個別で発行しているものに置き換えてください。
-https://github.com/payjp/user-docs/tree/master/tutorial
 */
 
 require_once('vendor/autoload.php');
+
+// `data-key` の部分は本番で使う際には管理画面内に個別で発行しているものに置き換えてください。
+// https://github.com/payjp/user-docs/tree/master/tutorial
+const DATA_KEY = 'pk_test_0383a1b8f91e8a6e3ea0e2a9';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -94,7 +96,7 @@ $charge = \Payjp\Charge::create([
       type="text/javascript"
       src="https://checkout.pay.jp/"
       class="payjp-button"
-      data-key="pk_test_0383a1b8f91e8a6e3ea0e2a9"
+      data-key="<?php echo DATA_KEY; ?>"
       data-partial="true">
     </script>
 
