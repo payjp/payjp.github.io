@@ -93,7 +93,7 @@
           exp_year: exp_year.value
         }
 
-        Payjp.createToken(card, 1000, function(s, response) {
+        Payjp.createToken(card, function(s, response) {
           document.getElementById('result').innerText = 'Token = ' + response.id;
         });
       });
