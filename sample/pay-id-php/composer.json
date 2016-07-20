@@ -1,0 +1,5 @@
+{
+  "require": {
+    "payjp/payjp-php": "0.0.1"
+  }
+}
