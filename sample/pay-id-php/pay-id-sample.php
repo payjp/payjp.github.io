@@ -15,22 +15,27 @@
 
 require_once('vendor/autoload.php');
 
+const AUTHORIZATON_ENDPOINT = 'https://id.pay.jp/.oauth2/authorize';
+const TOKEN_ENDPOINT        = 'https://api.pay.jp/u/.oauth2/token';
+const API_ENDPOINT_BASE     = 'https://api.pay.jp/u/v1';
+
 /*
- * CLIENT_ID, CLIENT_SECRETについては、管理画面内のものに置き換えてください。
+ * 下記の定数については、管理画面より取得できるものに置き換えてご利用ください。
+ * APIKEY_SECRETにはAPIKEYの秘密キーを、
+ * https://pay.jp/dashboard/settings/apikey
+ * CLIENT_ID, CLIENT_SECRETにはOAuthClientの情報を設定してください。
  * https://pay.jp/dashboard/settings/oauth
  */
-const AUTHORIZATON_ENDPOINT = 'https://id.pay.jp/.oauth2/authorize';
-const TOKEN_ENDPOINT = 'https://api.pay.jp/u/.oauth2/token';
-const API_ENDPOINT_BASE = 'https://api.pay.jp/u/v1';
+const APIKEY_SECRET = 'sk_test_c62fade9d045b54cd76d7036';
 const CLIENT_ID = '7a025319dca2624cea68713243820c46f4200dfb';
 const CLIENT_SECRET = '0e0f1464ed4761f500ecec242759021cd695de1e2ae4be56938e1eb';
 
 session_start();
 
-/*
- * アクセス許可画面からcodeをもってリダイレクトしてきた時の処理
- */
 if (isset($_GET['code'])) {
+    /*
+    * アクセス許可画面からcodeをもってリダイレクトしてきた時の処理
+    */
 
     /*
      * CSRFを防ぐためstateの検証を行うようにしてください
@@ -61,6 +66,7 @@ if (isset($_GET['code'])) {
 
     /*
      * 各種APIをリクエストして情報を取得します
+     * 各APIの詳細については https://pay.jp/docs/payjp-oauth-api の「API一覧」をご参照ください。
      */
     $req = curl_init(API_ENDPOINT_BASE . '/accounts');
     curl_setopt($req, CURLOPT_RETURNTRANSFER, true);
@@ -82,6 +88,26 @@ if (isset($_GET['code'])) {
     curl_setopt($req, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($req, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , 'Authorization: Bearer ' . $access_token ));
     $addresses = json_decode(curl_exec($req), true);
+} elseif (isset($_GET['error'])) {
+    /*
+     * ユーザがアクセス許可をしなかった場合や、その他のエラーが発生した場合は、リダイレクト時にerrorが渡されます。
+     */
+    echo $_GET['error'];
+    echo $_GET['error_description'];
+    exit;
+} else {
+    /*
+    *  下記 $aurhorize_url へのアクセスがAuthorization Requestとなります。
+    *  URLパラメータの詳細については https://pay.jp/docs/payjp-oauth-api の「OAuth API利用の流れ」の章をご参照ください。
+    */
+    $_SESSION['state'] = md5(uniqid());
+    $authorization_request_params = array(
+        'response_type' => 'code',
+        'client_id'     => CLIENT_ID,
+        'scope'         => 'accounts cards addresses',
+        'state'         => $_SESSION['state'],
+    );
+    $aurhorize_url = AUTHORIZATON_ENDPOINT . '?' . http_build_query($authorization_request_params);
 }
 
 /*
@@ -92,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $token = $_POST['payjp-token'];
   $amount = $_POST['amount'];
 
-  \Payjp\Payjp::setApiKey('sk_test_c62fade9d045b54cd76d7036');
+  \Payjp\Payjp::setApiKey(APIKEY_SECRET);
 
   try {
     $charge = \Payjp\Charge::create([
@@ -110,19 +136,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   exit;
 }
-
-/*
- *  下記 $aurhorize_url へのアクセスがAuthorization Requestとなります。
- *  URLパラメータの詳細については https://pay.jp/docs/payjp-oauth-api の「OAuth API利用の流れ」の章をご参照ください。
-*/
-$_SESSION['state'] = md5(uniqid());
-$authorization_request_params = array(
-    'response_type' => 'code',
-    'client_id'     => CLIENT_ID,
-    'scope'         => 'accounts cards addresses',
-    'state'         => $_SESSION['state'],
-);
-$aurhorize_url = AUTHORIZATON_ENDPOINT . '?' . http_build_query($authorization_request_params);
 ?>
 
 <!doctype html>
