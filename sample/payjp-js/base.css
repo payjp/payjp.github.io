@@ -1,0 +1,79 @@
+:root {
+  --payjp-primary-color: #198fcc;
+  --invalid-color: #b00020;
+}
+
+main {
+  margin: 0 auto;
+  padding: 0 20px;
+  max-width: 800px;
+}
+
+main a {
+  color: #198fcc;
+  color: var(--payjp-primary-color);
+  text-decoration: none;
+}
+
+main > section {
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.12);
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 80px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+main > section + section {
+  margin-top: 50px;
+}
+
+main > section form {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  transition-property: opacity, transform;
+  transition-duration: 0.3s;
+  transition-timing-function: linear;
+}
+
+@media (min-width: 670px) {
+  main > section {
+    padding: 40px;
+  }
+  main > section .success {
+    padding: 40px;
+  }
+}
+
+main > section .success {
+  position: absolute;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+main > section form.submitted,
+main > section form.submitting {
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+}
+
+main > section form.submitted + .success {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+main > section .error {
+  opacity: 0;
+  color: #b00020;
+  color: var(--invalid-color);
+}
+
+main > section .error.visible {
+  opacity: 1;
+}

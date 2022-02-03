@@ -1,0 +1,122 @@
+/* 入力欄(Payjp Element)外枠のスタイル */
+.mdc .text-field {
+  background-color: whitesmoke;
+  height: 56px;
+  padding: 0 16px;
+  border-radius: 4px 4px 0 0;
+  display: inline-flex;
+  align-items: baseline;
+}
+.mdc .text-field::before {
+  display: inline-block;
+  width: 0;
+  height: 50px;
+  content: "";
+  vertical-align: 0;
+}
+.mdc .text-field__input {
+  width: 100%;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  /* プレースホルダーの非表示 */
+  opacity: 0;
+}
+
+/* 入力欄の重ねスタイル */
+.mdc .text-field__ripple {
+  background-color: rgba(0, 0, 0, 0.87);
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 15ms linear;
+  z-index: 1;
+  pointer-events: none;
+}
+.mdc .text-field:hover .text-field__ripple {
+  opacity: 0.04;
+}
+
+/* ボーダーラインのスタイル */
+.mdc .text-field > .line-ripple {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.42);
+  transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+  color 180ms cubic-bezier(0.4, 0, 0.2, 1),
+  -webkit-transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ラベルのスタイル */
+.mdc .text-field > .floating-label {
+  position: absolute;
+  color: rgba(0, 0, 0, 0.6);
+  left: 16px;
+  right: initial;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  pointer-events: none;
+  line-height: 1.15rem;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+}
+
+/* ラベルの必須マーク */
+.mdc .text-field > .floating-label:after {
+  margin-left: 1px;
+  margin-right: 0px;
+  content: "*";
+}
+
+/* Elementコンテナの利用 */
+
+/* 入力欄周り */
+.mdc div.PayjpElement--focus ~ .text-field__ripple {
+  transition-duration: 75ms;
+  opacity: 0.12;
+}
+/* プレースホルダーの表示 */
+.mdc div.PayjpElement--focus,
+.mdc div.PayjpElement:not(.PayjpElement--empty) {
+  opacity: 1;
+}
+/* ラベルのアニメーション */
+.mdc div.PayjpElement--focus ~ .floating-label,
+.mdc div.PayjpElement:not(.PayjpElement--empty) ~ .floating-label {
+  transform: translateY(-20px) scale(0.75);
+  transform-origin: left top;
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  -webkit-transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 各カラーリングをmdcライブラリと合わせる */
+/* カーソル: style引数で渡すため不要 */
+/* ラベル */
+.mdc div.PayjpElement--focus ~ .floating-label {
+  color: #198fcc;
+  color: var(--payjp-primary-color);
+}
+/* ラベル(エラー時) */
+.mdc div.PayjpElement--invalid ~ .floating-label {
+  color: #b00020;
+  color: var(--invalid-color);
+}
+/* ボーダーライン */
+.mdc div.PayjpElement--focus ~ .line-ripple {
+  background-color: #198fcc;
+  background-color: var(--payjp-primary-color);
+}
+/* ボーダーライン(エラー時) */
+.mdc div.PayjpElement--invalid ~ .line-ripple {
+  background-color: #b00020;
+  background-color: var(--invalid-color);
+}
