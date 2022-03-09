@@ -3,252 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta content="width=device-width,initial-scale=1.0" name="viewport">
-<title>payjp.js v2 Sample</title>
+<title>payjp.js v2 design samples</title>
 <script type="text/javascript" src="https://js.pay.jp/v2/"></script>
-<!-- for IE11 --><script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>
-<style media="screen">
-main {
-  margin: 0 auto;
-  padding: 0 20px;
-  max-width: 800px;
-}
-
-p.semantic {
-  line-height: 1.4285em;
-}
-
-.semantic a {
-  background: 0 0;
-  color: #198fcc;
-  text-decoration: none;
-}
-
-main > section {
-  justify-content: center;
-  position: relative;
-  box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.12);
-  margin-left: -20px;
-  margin-right: -20px;
-  padding: 80px 0px;
-  display: flex;
-}
-
-main > section + section {
-  margin-top: 50px;
-}
-
-main > section > form {
-  position: relative;
-  width: 100%;
-  max-width: 500px;
-  transition-property: opacity, transform;
-  transition-duration: 0.3s;
-  transition-timing-function: linear;
-}
-
-@media (min-width: 670px) {
-  main > section {
-    padding: 40px;
-  }
-  main > section .success {
-    padding: 40px;
-  }
-}
-
-form.submitted,
-form.submitting {
-  opacity: 0;
-  transform: scale(0.9);
-  pointer-events: none;
-}
-
-form.submitting + .success {
-  opacity: 1;
-}
-
-form.submitted + .success > * {
-  opacity: 1;
-  transform: none !important;
-  pointer-events: auto;
-}
-
-main > section .success {
-  position: absolute;
-  width: 100%;
-  padding: 10px;
-  text-align: center;
-  pointer-events: none;
-}
-
-main > section .success > * {
-  transition-property: opacity, transform;
-  transition-duration: 0.4s;
-  transition-timing-function: linear;
-  opacity: 0;
-  transform: translateY(50px);
-}
-
-section.example-mdc .success .message {
-  color: grey;
-}
-
-main > section .error {
-  padding: 0 15px;
-  opacity: 0;
-  transform: translateY(10px);
-  transition-property: opacity, transform;
-  transition-duration: 0.3s;
-  transition-timing-function: linear;
-}
-
-main > section .error.visible {
-  opacity: 1;
-  transform: none;
-}
-
-main > section .error .message {
-  font-size: 13px;
-  color: red;
-}
-
-section.example-mdc * {
-  font-family: 'Noto Sans Japanese', sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  outline: none;
-  border-style: none;
-}
-
-section.example-mdc .row {
-  display: flex;
-  margin: 0 5px 10px;
-}
-
-section.example-mdc .field {
-  position: relative;
-  width: 100%;
-  height: 50px;
-  margin: 0 10px;
-}
-
-section.example-mdc .field.half-width {
-  width: 50%;
-}
-
-section.example-mdc .baseline {
-  position: absolute;
-  width: 100%;
-  height: 1px;
-  bottom: 0;
-  background-color: lightgrey;
-  transition: background-color 0.3s linear;
-}
-
-section.example-mdc label {
-  position: absolute;
-  transform-origin: 0 50%;
-  bottom: 8px;
-  color: #999;
-  transition-property: color, transform;
-  transition-duration: 0.3s;
-  transition-timing-function: ease-out;
-}
-
-section.example-mdc button {
-  width: calc(100% - 30px);
-  height: 40px;
-  margin: 20px 15px 0;
-  background-color: #198fcc;
-  border-radius: 4px;
-  color: #fff;
-  cursor: pointer;
-}
-
-section.example-mdc .input {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  padding-bottom: 5px;
-}
-
-section.example-mdc .input::-webkit-input-placeholder {
-  color: #E0E0E0;
-}
-
-section.example-mdc .input::-moz-placeholder {
-  color: #E0E0E0;
-}
-
-section.example-mdc .input:-ms-input-placeholder {
-  color: #E0E0E0;
-}
-
-section.example-mdc .input.PayjpElement {
-  opacity: 0;
-}
-
-section.example-mdc .input.PayjpElement--focus,
-section.example-mdc .input:not(.PayjpElement--empty) {
-  opacity: 1;
-}
-
-section.example-mdc .input.PayjpElement--focus + label,
-section.example-mdc .input:not(.PayjpElement--empty) + label {
-  color: #198fcc;
-  transform: scale(0.85) translateY(-25px);
-}
-
-section.example-mdc .input.PayjpElement--invalid + label {
-  color: red;
-}
-
-section.example-mdc .input.PayjpElement--focus + label + .baseline {
-  background-color: #198fcc;
-}
-
-section.example-mdc .input.PayjpElement--focus.PayjpElement--invalid + label + .baseline {
-  background-color: red;
-}
+<!-- for IE11 -->
+<script>
+  window.MSInputMethodContext
+  && document.documentMode
+  && document.write(
+    '<script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"><\/script>'
+  )
+</script>
+<!-- end: for IE11 -->
+<!-- material design library -->
+<script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+<link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+<!-- end: material design library -->
+<link rel="stylesheet" type="text/css" href="base.css" />
+<link rel="stylesheet" type="text/css" href="mdc-common.css" />
+<link rel="stylesheet" type="text/css" href="mdc-on-v2.css" />
+<style>
 </style>
 </head>
 <body>
-
 <main>
-<h1>payjp.js v2 Design Samples</h1>
-<p class="semantic">テストカードは<a href="https://pay.jp/docs/testcard" target="_blank">こちら</a></p>
-<p class="semantic">このフォームのソースコードは<a href="https://github.com/payjp/payjp.github.io/blob/master/sample/payjp-js/index.html" target="_blank">こちら</a></p>
-<section class="example-mdc">
+<h1>payjp.js v2 決済フォーム</h1>
+<ul>
+  <li>payjp.js v2を利用した決済フォームのサンプル集です</li>
+  <li>テストカードは<a href="https://pay.jp/docs/testcard" target="_blank">こちら</a></li>
+  <li>このフォームのソースコードは<a href="https://github.com/payjp/payjp.github.io/blob/master/sample/payjp-js/index.html" target="_blank">こちら</a></li>
+</ul>
+<section class="mdc" id="v2-mdc">
+  <h2>マテリアルデザイン調</h2>
   <form>
     <div class="row">
-      <div class="field">
-        <div id="example-mdc-card-number" class="input"></div>
-        <label for="example-mdc-card-number">カード番号</label>
-        <div class="baseline"></div>
-      </div>
+      <label class="field text-field" for="v2-mdc-card-number">
+        <div id="v2-mdc-card-number" class="text-field__input"></div>
+        <span class="text-field__ripple"></span>
+        <span class="floating-label">カード番号</span>
+        <span class="line-ripple"></span>
+      </label>
     </div>
     <div class="row">
-      <div class="field half-width">
-        <div id="example-mdc-card-expiry" class="input"></div>
-        <label for="example-mdc-card-expiry">有効期限</label>
-        <div class="baseline"></div>
-      </div>
-      <div class="field half-width">
-        <div id="example-mdc-card-cvc" class="input"></div>
-        <label for="example-mdc-card-cvc">CVC</label>
-        <div class="baseline"></div>
-      </div>
+      <label class="field text-field" for="v2-mdc-card-expiry">
+        <div id="v2-mdc-card-expiry" class="text-field__input"></div>
+        <span class="text-field__ripple"></span>
+        <span class="floating-label">有効期限</span>
+        <span class="line-ripple"></span>
+      </label>
+      <label class="field text-field" for="v2-mdc-card-cvc">
+        <div id="v2-mdc-card-cvc" class="text-field__input"></div>
+        <span class="text-field__ripple"></span>
+        <span class="floating-label">CVC</span>
+        <span class="line-ripple"></span>
+      </label>
     </div>
     <div class="row">
-      <div class="field">
-        <input id="example-mdc-name" class="input PayjpElement PayjpElement--empty" type="text" placeholder="PAY KUN" autocomplete="name" required>
-        <label for="example-mdc-name">名義</label>
-        <div class="baseline"></div>
-      </div>
+      <label class="field mdc-text-field mdc-text-field--filled">
+        <span class="mdc-text-field__ripple"></span>
+        <span class="mdc-floating-label">名義</span>
+        <input id="v2-mdc-name"
+               class="mdc-text-field__input"
+               autocomplete="cc-name"
+               type="text"
+               placeholder="PAY KUN"
+        >
+        <span class="mdc-line-ripple"></span>
+      </label>
     </div>
-    <div class="error" role="alert">
-      <span class="message"></span>
+    <div class="row">
+      <button class="field mdc-button mdc-button--raised">
+        <span class="mdc-button__label">カード情報を送信する</span>
+      </button>
     </div>
-    <button type="submit">カード情報を送信する</button>
+    <div class="row error" role="alert">
+      <span class="field message"></span>
+    </div>
   </form>
   <div class="success">
     <h2 class="title">入力が完了しました！</h2>
@@ -257,134 +86,129 @@ section.example-mdc .input.PayjpElement--focus.PayjpElement--invalid + label + .
   </div>
 </section>
 </main>
+<script src="mdc.js"></script>
 <script type="text/javascript">
-var payjp = Payjp('pk_test_0383a1b8f91e8a6e3ea0e2a9')
+(function() {
+  var buttonElm = setUpMDC()
+  if (Payjp && buttonElm !== null) {
+    var payjp = Payjp('pk_test_0383a1b8f91e8a6e3ea0e2a9')
+    var elements = payjp.elements()
 
+    var elementStyle = {
+      base: {
+        fontFamily: '\'Noto Sans Japanese\', sans-serif',
+        '::placeholder': {
+          color: 'rgba(0, 0, 0, 0.54)',
+        },
+        caretColor: '#198FCC',
+        lineHeight: '28px',
+      },
+      invalid: {
+        color: 'rgba(0, 0, 0, 0.87)',
+      },
+    }
+    var numberElement = elements.create('cardNumber', {
+      style: elementStyle,
+      placeholder: '4242 4242 4242 4242'
+    })
+    var expiryElement = elements.create('cardExpiry', {
+      style: elementStyle,
+    })
+    var cvcElement = elements.create('cardCvc', {
+      style: elementStyle,
+    })
+    numberElement.mount('#v2-mdc-card-number')
+    expiryElement.mount('#v2-mdc-card-expiry')
+    cvcElement.mount('#v2-mdc-card-cvc')
 
-// setup PayjpElements
-var elements = payjp.elements({
-  locale: 'ja'
-})
+    var payjpElements = [numberElement, expiryElement, cvcElement]
+    var nameInput = document.querySelector('#v2-mdc-name')
 
-var elementStyle = {
-  base: {
-    fontWeight: 500,
-    fontFamily: '\'Noto Sans Japanese\', sans-serif',
-    fontSize: '16px',
-    '::placeholder': {
-      color: '#E0E0E0',
-    },
-  },
-  invalid: {
-    color: 'red',
-    '::placeholder': {
-      color: 'red',
-    },
-  },
-}
-var numberElement = elements.create('cardNumber', {
-  style: elementStyle,
-  placeholder: '4242 4242 4242 4242'
-})
-var expiryElement = elements.create('cardExpiry', {
-  style: elementStyle,
-})
-var cvcElement = elements.create('cardCvc', {
-  style: elementStyle,
-})
-numberElement.mount('#example-mdc-card-number')
-expiryElement.mount('#example-mdc-card-expiry')
-cvcElement.mount('#example-mdc-card-cvc')
+    var section = document.querySelector('section#v2-mdc')
+    var form = section.querySelector('form')
+    var errorElm = section.querySelector('.error')
 
-// setup optional input forms
-var nameInput = document.querySelector('#example-mdc-name')
-nameInput.addEventListener('focus', function() {
-  nameInput.classList.add('PayjpElement--focus');
-});
-nameInput.addEventListener('blur', function() {
-  nameInput.classList.remove('PayjpElement--focus');
-});
-nameInput.addEventListener('keyup', function() {
-  if (nameInput.value.length === 0) {
-    nameInput.classList.add('PayjpElement--empty');
-  } else {
-    nameInput.classList.remove('PayjpElement--empty');
-  }
-})
-
-var section = document.querySelector('section.example-mdc')
-setup([numberElement, expiryElement, cvcElement], section, {name: nameInput})
-
-function setup(elements, section, optionElms) {
-  var form = section.querySelector('form')
-  var buttonElm = form.querySelector('button')
-  var errorElm = form.querySelector('.error')
-  var errorMsgElm = errorElm.querySelector('.message')
-
-  // setup EventListener for PayjpElements
-  var errorMsgs = {}
-  elements.forEach(function(element, idx) {
-    element.on('change', function(event) {
-      if (event.error) {
-        errorElm.classList.add('visible')
-        errorMsgs[idx] = event.error.message
-        errorMsgElm.innerText = event.error.message
+    function displayErrorMsg(msg) {
+      errorElm.classList.add('visible')
+      errorElm.querySelector('.message').innerText = msg
+    }
+    // 入力値のバリデーション結果を表示
+    var changes = {}
+    payjpElements.forEach(function(element, idx) {
+      changes[idx] = null
+      element.on('change', function(event) {
+        changes[idx] = event
         buttonElm.setAttribute('disabled', 'true')
-      } else {
-        errorMsgs[idx] = null
-        var errorMsg = Object.keys(errorMsgs).sort().reduce(function(msg, i) {
-          return msg || errorMsgs[i]
-        }, null)
-
-        if (errorMsg) {
-          errorMsgElm.innerText = errorMsg
-          buttonElm.setAttribute('disabled', 'true')
+        if (event.error) {
+          displayErrorMsg(event.error.message)
         } else {
-          errorElm.classList.remove('visible')
-          buttonElm.removeAttribute('disabled')
+          var errorMsg = Object.keys(changes).sort().reduce(function(msg, i) {
+            if (msg) {
+              return msg
+            } else if (changes[i] && changes[i].error) {
+              return changes[i].error.message
+            }
+            return null
+          }, null)
+
+          if (errorMsg) {
+            displayErrorMsg(errorMsg)
+          } else {
+            errorElm.classList.remove('visible')
+            buttonElm.removeAttribute('disabled')
+          }
+        }
+      })
+    })
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault()
+      if (!Object.keys(changes).sort().reduce(function(prev, i) {
+        return prev && changes[i] && changes[i].complete
+      }, true)) {
+        return displayErrorMsg('入力が完了していません。')
+      }
+
+      var options = {
+        card: {
+          name: nameInput.value || undefined
         }
       }
-    })
-  })
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault()
+      buttonElm.setAttribute('disabled', 'true')
+      form.classList.add('submitting')
 
-    form.classList.add('submitting')
-    buttonElm.setAttribute('disabled', 'true')
-
-    // for optional input form
-    var options = {card: {}}
-    Object.keys(optionElms).forEach(function(key) {
-      options.card[key] = optionElms[key].value || undefined
-    })
-
-    payjp.createToken(elements[0], options).then(function(result) {
-      form.classList.remove('submitting')
-
-      if (result.id) {
-        section.querySelector('.token').innerText = result.id
-        form.classList.add('submitted')
-      } else {
-        errorElm.classList.add('visible')
-        errorMsgElm.innerText = result.error.message
+      payjp.createToken(payjpElements[0], options).then(function(result) {
+        form.classList.remove('submitting')
         buttonElm.removeAttribute('disabled')
-      }
-    });
-  });
 
-  section.querySelector('a.reset').addEventListener('click', function(e) {
-    e.preventDefault()
-
-    // cleanup
-    form.reset()
-    elements.forEach(function(element) {
-      element.clear()
+        if (result.id) {
+          section.querySelector('.token').innerText = result.id
+          form.classList.add('submitted')
+        } else {
+          displayErrorMsg(result.error.message)
+        }
+      })
     })
-    nameInput.classList.add('PayjpElement--empty');
-    buttonElm.removeAttribute('disabled')
-    errorElm.classList.remove('visible')
-    form.classList.remove('submitted')
-  });
-}
+
+    // クリーンアップ処理
+    section.querySelector('a.reset').addEventListener('click', function(e) {
+      e.preventDefault()
+
+      form.reset()
+
+      payjpElements.forEach(function(element) {
+        element.clear()
+      })
+      nameInput.parentElement.classList.remove('mdc-text-field--label-floating')
+      var labelElm = nameInput.parentElement.querySelector('.mdc-floating-label--float-above')
+      if (labelElm) {
+        labelElm.classList.remove('mdc-floating-label--float-above')
+      }
+
+      errorElm.classList.remove('visible')
+      form.classList.remove('submitted')
+    })
+  }
+})()
 </script>

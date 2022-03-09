@@ -1,0 +1,287 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1.0" name="viewport">
+<title>payjp.js v1 (Deprecated) sample for migration</title>
+<script type="text/javascript" src="https://js.pay.jp/v1/"></script>
+<!-- for IE11 -->
+<script>
+  window.MSInputMethodContext
+  && document.documentMode
+  && document.write(
+    '<script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"><\/script>'
+  )
+</script>
+<!-- end: for IE11 -->
+<!-- material design library -->
+<script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+<link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+<!-- end: material design library -->
+<link rel="stylesheet" type="text/css" href="base.css" />
+<link rel="stylesheet" type="text/css" href="mdc-common.css" />
+</head>
+<body>
+<main>
+<h1>payjp.js v1 (Deprecated) 決済フォーム</h1>
+<ul>
+  <li><a href="https://pay.jp/docs/migrate-payjs-v1">v1提供終了に伴う移行</a>のサンプルです。移行先のv2決済フォームは<a href="./index.html" target="_blank">こちら</a></li>
+  <li>テストカードは<a href="https://pay.jp/docs/testcard" target="_blank">こちら</a></li>
+  <li>このフォームのソースコードは<a href="https://github.com/payjp/payjp.github.io/blob/master/sample/payjp-js/v1.html" target="_blank">こちら</a></li>
+</ul>
+<section class="mdc" id="v1">
+  <h2>マテリアルデザイン調</h2>
+  <form>
+    <div class="row">
+      <label class="field mdc-text-field mdc-text-field--filled">
+        <span class="mdc-text-field__ripple"></span>
+        <span class="mdc-floating-label">カード番号</span>
+        <input id="v1-card-number"
+               class="mdc-text-field__input"
+               autocomplete="cc-number"
+               autocorrect="off"
+               spellcheck="false"
+               inputmode="numeric"
+               placeholder="4242 4242 4242 4242"
+               required
+        >
+        <span class="mdc-line-ripple"></span>
+      </label>
+    </div>
+    <div class="row">
+      <label class="field mdc-text-field mdc-text-field--filled">
+        <span class="mdc-text-field__ripple"></span>
+        <span class="mdc-floating-label">月</span>
+        <input id="v1-card-expiry-month"
+               class="mdc-text-field__input"
+               autocomplete="cc-exp-month"
+               autocorrect="off"
+               spellcheck="false"
+               type="number"
+               placeholder="12"
+               required
+        >
+        <span class="mdc-line-ripple"></span>
+      </label>
+      <label class="field mdc-text-field mdc-text-field--filled">
+        <span class="mdc-text-field__ripple"></span>
+        <span class="mdc-floating-label">年</span>
+        <input id="v1-card-expiry-year"
+               class="mdc-text-field__input"
+               autocomplete="cc-exp-year"
+               autocorrect="off"
+               spellcheck="false"
+               type="number"
+               placeholder="2025"
+               required
+        >
+        <span class="mdc-line-ripple"></span>
+      </label>
+      <label class="field mdc-text-field mdc-text-field--filled">
+        <span class="mdc-text-field__ripple"></span>
+        <span class="mdc-floating-label">CVC</span>
+        <input id="v1-card-cvc"
+               class="mdc-text-field__input"
+               autocomplete="cc-csc"
+               autocorrect="off"
+               spellcheck="false"
+               type="number"
+               placeholder="CVC"
+               max-length="4"
+               required
+        >
+        <span class="mdc-line-ripple"></span>
+      </label>
+    </div>
+    <div class="row">
+      <label class="field mdc-text-field mdc-text-field--filled">
+        <span class="mdc-text-field__ripple"></span>
+        <span class="mdc-floating-label">名義</span>
+        <input id="v1-name"
+               class="mdc-text-field__input"
+               autocomplete="cc-name"
+               type="text"
+               placeholder="PAY KUN"
+        >
+        <span class="mdc-line-ripple"></span>
+      </label>
+    </div>
+    <div class="row">
+      <button class="field mdc-button mdc-button--raised">
+        <span class="mdc-button__label">カード情報を送信する</span>
+      </button>
+    </div>
+    <div class="row error" role="alert">
+      <span class="field message"></span>
+    </div>
+  </form>
+  <div class="success">
+    <h2 class="title">入力が完了しました！</h2>
+    <p class="message"><span>token: </span><span class="token"></span></p>
+    <a class="reset" href="#">入力フォームに戻る</a>
+  </div>
+</section>
+</main>
+<script src="mdc.js"></script>
+<script type="text/javascript">
+(function() {
+  var buttonElm = setUpMDC()
+  if (Payjp && buttonElm !== null) {
+    Payjp.setPublicKey('pk_test_0383a1b8f91e8a6e3ea0e2a9')
+
+    var numberInput = document.querySelector('#v1-card-number')
+    var expMonthInput = document.querySelector('#v1-card-expiry-month')
+    var expYearInput = document.querySelector('#v1-card-expiry-year')
+    var cvcInput = document.querySelector('#v1-card-cvc')
+    // optional input forms
+    var nameInput = document.querySelector('#v1-name')
+
+    var elements = [
+      numberInput,
+      expMonthInput,
+      expYearInput,
+      cvcInput,
+      nameInput,
+    ]
+
+    var section = document.querySelector('section#v1')
+    var form = section.querySelector('form')
+    var errorElm = section.querySelector('.error')
+
+    // 入力値の整形や制限 (v2ではライブラリが行ってくれます)
+    numberInput.addEventListener('input', function(e) {
+      // 数値以外の入力を強制削除 & フォーマット(4桁ごとにスペースを追加)
+      var numberStr = e.target.value.replace(/\D/g, '').slice(0, 17)
+      var displayedNumber = ''
+      for (var i = 0;i < numberStr.length / 4;i++) {
+        displayedNumber += numberStr.slice(i * 4, i * 4 + 4) + ' '
+      }
+      e.target.value = displayedNumber.trim()
+    })
+    expMonthInput.addEventListener('input', function(e) {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 2)
+    })
+    expYearInput.addEventListener('input', function(e) {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4)
+    })
+    cvcInput.addEventListener('input', function(e) {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4)
+    })
+
+    // 入力値のバリデーション (v2ではライブラリが行ってくれます)
+    var completes = {number: false, expiry: false, cvc: false}
+    numberInput.addEventListener('blur', function(e) {
+      var prev = completes.number
+      completes.number = validNumber(e.target.value.replace(/\s/g, ''))
+      if (!prev && completes.number) {
+        errorElm.classList.remove('visible')
+      }
+    })
+    expMonthInput.addEventListener('blur', function(e) {
+      var prev = completes.expiry
+      completes.expiry = validExpiry(e.target.value, expYearInput.value || '9999')
+      if (!prev && completes.expiry) {
+        errorElm.classList.remove('visible')
+      }
+    })
+    expYearInput.addEventListener('blur', function(e) {
+      var prev = completes.expiry
+      completes.expiry = validExpiry(expMonthInput.value || '12', e.target.value)
+      if (!prev && completes.expiry) {
+        errorElm.classList.remove('visible')
+      }
+    })
+    cvcInput.addEventListener('blur', function(e) {
+      var prev = completes.cvc
+      completes.cvc = validCvc(e.target.value)
+      if (!prev && completes.cvc) {
+        errorElm.classList.remove('visible')
+      }
+    })
+
+    function displayErrorMsg(msg) {
+      errorElm.classList.add('visible')
+      errorElm.querySelector('.message').innerText = msg
+    }
+    function validNumber(value) {
+      numberInput.parentElement.classList.remove('mdc-text-field--invalid')
+      var valid = Payjp.validate.cardNumber(value)
+      if (!valid) {
+        numberInput.parentElement.classList.add('mdc-text-field--invalid')
+        displayErrorMsg('カード番号が正しくありません')
+      }
+      return valid
+    }
+    function validExpiry(month, year) {
+      expMonthInput.parentElement.classList.remove('mdc-text-field--invalid')
+      expYearInput.parentElement.classList.remove('mdc-text-field--invalid')
+
+      var valid = Payjp.validate.expiry(month, year)
+      if (!valid) {
+        expMonthInput.parentElement.classList.add('mdc-text-field--invalid')
+        expYearInput.parentElement.classList.add('mdc-text-field--invalid')
+        displayErrorMsg('有効期限が正しくありません')
+      }
+      return valid
+    }
+    function validCvc(value) {
+      cvcInput.parentElement.classList.remove('mdc-text-field--invalid')
+
+      var valid = Payjp.validate.cvc(value)
+      if (!valid) {
+        cvcInput.parentElement.classList.add('mdc-text-field--invalid')
+        displayErrorMsg('CVCが正しくありません')
+      }
+      return valid
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault()
+
+      var card = {
+        number: numberInput.value.replace(/\s/g, ''),
+        cvc: cvcInput.value,
+        exp_month: expMonthInput.value,
+        exp_year: expYearInput.value,
+        name: nameInput.value // optional
+      }
+      if (!validNumber(card.number) || !validExpiry(card.exp_month, card.exp_year) || !validCvc(card.cvc)) {
+        return
+      }
+
+      buttonElm.setAttribute('disabled', 'true')
+      form.classList.add('submitting')
+
+      Payjp.createToken(card, function (s, result) {
+        form.classList.remove('submitting')
+        buttonElm.removeAttribute('disabled')
+
+        if (s === 200 && result.id) {
+          section.querySelector('.token').innerText = result.id
+          form.classList.add('submitted')
+        } else {
+          displayErrorMsg(result.error.message)
+        }
+      })
+    })
+
+    // クリーンアップ処理
+    section.querySelector('a.reset').addEventListener('click', function(e) {
+      e.preventDefault()
+
+      form.reset()
+
+      elements.forEach(function(element) {
+        element.parentElement.classList.remove('mdc-text-field--label-floating')
+        var labelElm = element.parentElement.querySelector('.mdc-floating-label--float-above')
+        if (labelElm) {
+          labelElm.classList.remove('mdc-floating-label--float-above')
+        }
+      })
+
+      errorElm.classList.remove('visible')
+      form.classList.remove('submitted')
+    })
+  }
+})()
+</script>

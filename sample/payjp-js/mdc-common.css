@@ -1,0 +1,37 @@
+section.mdc .row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+section.mdc .field {
+  position: relative;
+  width: 100%;
+  margin: 0 10px;
+}
+
+section.mdc * {
+  font-family: 'Noto Sans Japanese', sans-serif;
+}
+
+/* 各所のMDCデフォルトのカラーリングを上書き */
+/* カーソル */
+section.mdc .mdc-text-field:not(.mdc-text-field--invalid) .mdc-text-field__input {
+  caret-color: #198fcc;
+  caret-color: var(--payjp-primary-color);
+}
+/* ラベル */
+section.mdc .mdc-text-field--focused:not(.mdc-text-field--invalid) .mdc-floating-label {
+  color: #198fcc;
+  color: var(--payjp-primary-color);
+}
+
+/* ボーダーライン */
+section.mdc .mdc-text-field--filled:not(.mdc-text-field--invalid) .mdc-line-ripple::after {
+  border-bottom-color: #198fcc;
+  border-bottom-color: var(--payjp-primary-color);
+}
+/* ボタン */
+section.mdc .mdc-button.mdc-button--raised:not(:disabled) {
+  background-color: #198fcc;
+  background-color: var(--payjp-primary-color);
+}
