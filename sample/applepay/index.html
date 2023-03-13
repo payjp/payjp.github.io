@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <script type="text/javascript" src="https://js.pay.jp/"></script>
+    <script type="text/javascript" src="https://js.pay.jp/v2/pay.js"></script>
 
     <style>
     @supports (-webkit-appearance: -apple-pay-button) { 
@@ -48,7 +48,7 @@
     </div>
 
     <script type="text/javascript">
-      Payjp.setPublicKey('pk_test_0383a1b8f91e8a6e3ea0e2a9');
+      const payjp = Payjp('pk_test_0383a1b8f91e8a6e3ea0e2a9');
 
       function checkAvailabilityHandler(available) {
         if (available) {
@@ -69,12 +69,11 @@
             amount: '1000'
           }
         };
-        var session = Payjp.applePay.buildSession(paymentRequest,
+        var session = payjp.applePay.buildSession(paymentRequest,
           function (result) {
             console.log(result);
             /*
             // サーバーにPAY.JPのトークンを渡して、決済完了後にApplePayのペイメントシートを閉じる例
-
             $.post( "/your_server_endpoint", { token: result.token.id }).done(function() {
               session.completePayment(ApplePaySession.STATUS_SUCCESS);
             }).fail(function() {
@@ -93,7 +92,7 @@
       }
       document.getElementById('apple-pay-button').addEventListener('click', onClick);
 
-      Payjp.applePay.checkAvailability(checkAvailabilityHandler);
+      payjp.applePay.checkAvailability(checkAvailabilityHandler);
     </script>
   </body>
 </html>
